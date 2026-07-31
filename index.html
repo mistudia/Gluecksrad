@@ -3,257 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Glücksrad mit knalliger Markierung</title>
+<title>miStudia - Glücksrad</title>
+
 <style>
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: sans-serif;
-  background: #F2FF00; /* knalliges Gelb */
-  min-height: 100vh;
-  padding: 20px;
-  margin: 0;
-}
-textarea {
-  width: 250px;
-  height: 150px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-.canvas-container {
-  position: relative;
-}
-canvas {
-  border: 5px solid #333;
-  border-radius: 50%;
-  margin: 20px 0;
-  background: #F2FF00;
-}
-.pointer {
-  width: 0;
-  height: 0;
-
-  border-left: 24px solid transparent;
-  border-right: 24px solid transparent;
-  border-top: 48px solid black; /* 🔥 schwarzer Rand */
-
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 9;
-}
-
-/* 🔴 innerer roter Pfeil */
-.pointer {
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 9;
-
-  width: 0;
-  height: 0;
-
-  /* 🔥 Außen (Rand) */
-  border-left: 24px solid transparent;
-  border-right: 24px solid transparent;
-  border-top: 48px solid black;
-}
-
-
-
-/* 🔴 Innen (perfekt zentriert) */
-.pointer::after {
-  content: "";
-  position: absolute;
-
-  /* 🔥 WICHTIG: exakt mittig */
-  top: -46px;
-  left: -20px;
-
-  width: 0;
-  height: 0;
-
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 40px solid red;
-}
-
-.button-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-button {
-  padding: 10px 20px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-#wheelWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  flex: 1; /* 🔥 sorgt für echte Mitte */
-}
-
-/* --- LOGO oben links --- */
-#logo {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  width: 350px;
-  height: auto;
-  z-index: 1000;
-  opacity: 0.9;
-  transition: all 0.3s;
-}
-#logo:hover {
-  transform: scale(1.05);
-  opacity: 1;
-}
-
-/* --- FOOTER --- */
-#footer {
-  position: fixed;
-  bottom: 10px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 14px;
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-
-
-#rightSide {
-  position: fixed;
-  right: 340px;
-  top: 52%;
-  transform: translateY(-50%);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 300px;
-
-  background: rgba(255,255,255,0.3);
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-#title {
-  position: absolute;
-  top: 120px;      /* 🔥 hier steuerst du die Höhe */
-  left: 50%;
-  transform: translateX(-50%);
-  
-  font-size: 48px;
-  font-weight: bold;
-}
-
-
-
-@media (max-width: 768px) {
+  * { box-sizing: border-box; }
 
   body {
-    padding: 10px;
-    justify-content: flex-start; /* 🔥 verhindert Zentrier-Problem */
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #f2f6ff;
+    color: #1f2937;
+    display: flex;
+    justify-content: center;
+    padding: 25px 15px;
   }
 
-  /* Logo kleiner */
-  #logo {
-    width: 110px;
-    top: 5px;
-    left: 5px;
+  .app {
+    width: 100%;
+    max-width: 820px;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.1);
   }
 
-  /* Titel unter Logo */
-  #title {
-    position: static;
-    transform: none;
-    font-size: 22px;
-    margin-top: 75px;
-    margin-bottom: 10px;
+  .logo-link {
+    display: block;
     text-align: center;
+    margin-bottom: 15px;
   }
 
-  /* Rad kompakter */
-  #wheelWrapper {
-    margin-top: 30px;
-  flex: none; /* 🔥 NEU – verhindert Streckung */
+  .logo {
+    width: 100%;
+    max-width: 210px;
+    height: auto;
+    display: block;
+    margin: auto;
+  }
 
+  h1 {
+    text-align: center;
+    color: #2563eb;
+    margin: 10px 0 5px;
+  }
+
+  .info {
+    text-align: center;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* --- Rad --- */
+  #wheelWrapper {
+    display: flex;
+    justify-content: center;
+    margin: 14px 0 28px;
+  }
+
+  .canvas-container {
+    position: relative;
+    width: min(80vw, 520px);
   }
 
   canvas {
-    width: 75vw;
-    height: 75vw;
-    max-width: 280px;
-    max-height: 280px;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border: 6px solid #1e293b;
+    border-radius: 50%;
+    background: #FFD60A;
   }
 
   .pointer {
-    top: -px;
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-top: 40px solid #1e293b;
   }
 
-  /* 🔥 GANZ WICHTIG: weniger Höhe + kompakt */
-  #rightSide {
-    position: static;
-    transform: none;
-    width: 100%;
-    margin-top: 8px;
-    padding: 8px;
+  .pointer::after {
+    content: "";
+    position: absolute;
+    top: -40px;
+    left: -12px;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 28px solid #dc2626;
+  }
+
+  /* --- Steuerung --- */
+  label {
+    display: block;
+    text-align: center;
+    color: #475569;
+    font-weight: bold;
+    margin-bottom: 8px;
   }
 
   textarea {
     width: 100%;
-    height: 90px; /* 🔥 deutlich kleiner → Button sichtbar */
-    font-size: 14px;
+    height: 130px;
+    padding: 12px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    resize: vertical;
+    outline: none;
+  }
+
+  textarea:focus {
+    border-color: #2563eb;
+  }
+
+  .buttons {
+    margin-bottom: 42px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
   }
 
   button {
-    width: 100%;
+    border: none;
+    padding: 12px 26px;
+    border-radius: 9px;
     font-size: 16px;
-    padding: 14px;
-    margin-top: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
   }
 
-  /* Footer kleiner */
-  #footer {
-    font-size: 10px;
-    bottom: 5px;
+  button:hover {
+    background: #1e40af;
   }
-}
 
+  button:disabled {
+    background: #93c5fd;
+    cursor: not-allowed;
+  }
 
+  #ergebnis {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #16a34a;
+    min-height: 28px;
+  }
 
+  .footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.8;
+  }
 
+  .footer-logo {
+    width: 150px;
+    max-width: 60%;
+    display: block;
+    margin: 0 auto 12px;
+  }
 
+  .footer a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+  }
 
+  .footer a:hover {
+    text-decoration: underline;
+  }
 
+  @media (max-width: 650px) {
+    .app { padding: 18px 10px; }
+    h1 { font-size: 22px; }
+    textarea { height: 100px; font-size: 14px; }
+    button { width: 100%; }
+  }
 </style>
 </head>
 <body>
-<img src="logo.png" id="logo">
 
-<h1 id="title">Glücksrad MA</h1>
+<div class="app">
 
-<!-- 🎯 RAD (JETZT FIX ZENTRIERT) -->
-<div id="wheelWrapper">
-  <div class="canvas-container">
-    <div class="pointer"></div>
-    <canvas id="wheelCanvas" width="400" height="400"></canvas>
+  <a href="https://mistudia.com" target="_blank" rel="noopener noreferrer" class="logo-link">
+    <!-- Platzhalter: einfach eine Datei "logo.png" neben diese HTML-Datei legen -->
+    <img src="logo.png" alt="miStudia Logo" class="logo"
+         onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
+    <span id="logoFallback" style="display:none;font-size:26px;font-weight:bold;color:#2563eb;">miStudia</span>
+  </a>
+
+  <h1 id="title">miStudia - Glücksrad</h1>
+  <p class="info">Trage deine Einträge ein und dreh das Rad.</p>
+
+  <div id="wheelWrapper">
+    <div class="canvas-container">
+      <div class="pointer"></div>
+      <canvas id="wheelCanvas" aria-label="Glücksrad"></canvas>
+    </div>
   </div>
-</div>
 
-<!-- 👉 RECHTS: STEUERUNG -->
-<div id="rightSide">
-  <label>Liste der Namen (ein Name pro Zeile):</label><br>
+  <div class="buttons">
+    <button id="spinBtn" onclick="spinWheel()">🎡 Drehen</button>
+  </div>
+
+  <label for="nameList">Liste der Einträge (ein Eintrag pro Zeile):</label>
   <textarea id="nameList">Preis 1
 Preis 2
 Preis 3
@@ -261,67 +233,78 @@ Preis 4
 Preis 5
 Preis 6</textarea>
 
- <div class="button-row">
-  <button onclick="spinWheel()">Drehen</button>
-</div>
-</div>
+  <div id="ergebnis" role="status" aria-live="polite"></div>
 
+  <footer class="footer">
+    <a href="https://mistudia.com" target="_blank" rel="noopener noreferrer">
+      <img src="logo.png" alt="miStudia Logo" class="footer-logo"
+           onerror="this.style.display='none';document.getElementById('footerLogoFallback').style.display='block';">
+      <span id="footerLogoFallback" style="display:none;font-size:22px;font-weight:bold;color:#2563eb;">miStudia</span>
+    </a>
+    <div>
+      © <span id="copyright-jahr"></span> miStudia ·
+      <a href="https://mistudia.com" target="_blank" rel="noopener noreferrer">mistudia.com</a>
+    </div>
+  </footer>
+
+</div>
 
 <script>
 const canvas = document.getElementById('wheelCanvas');
 const ctx = canvas.getContext('2d');
+const nameListEl = document.getElementById('nameList');
+const ergebnisEl = document.getElementById('ergebnis');
+const spinBtn = document.getElementById('spinBtn');
+
+const SIZE = 400; // logische Zeichenfläche (unabhängig von der Bildschirmauflösung)
+const STORAGE_KEY = 'gluecksrad-namen';
 
 let rotation = 0;
 let spinning = false;
-let spinSpeed = 0.005;
+let spinSpeed = 0;
 let targetSpeed = 0;
 let names = [];
 let colors = [];
 let winningIndex = null;
+let idle = true;
+let stopTimeoutId = null;
 
 const colorsDefault = [
-  '#FFEB3B', // gelb
-  '#2196f3', // blau
-  '#f44336', // rot
-  '#4caf50', // grün
-  '#ff9800', // orange
-  '#9c27b0', // lila
-  '#00e676', // hellgrün
-  '#3f51b5', // indigo
-  '#009688', // türkis
-  '#e91e63', // pink
-  '#607d8b'  // grau-blau
+  '#FFEB3B', '#2196f3', '#f44336', '#4caf50', '#ff9800',
+  '#9c27b0', '#00e676', '#3f51b5', '#009688', '#e91e63', '#607d8b'
 ];
+
+/* --- Auflösung für scharfe Darstellung auf Retina/Mobile --- */
+function setupCanvasResolution() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = SIZE * dpr;
+  canvas.height = SIZE * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function loadSavedNames() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) nameListEl.value = saved;
+  } catch (e) { /* localStorage evtl. nicht verfügbar - ignorieren */ }
+}
+
+function saveNames() {
+  try { localStorage.setItem(STORAGE_KEY, nameListEl.value); }
+  catch (e) { /* ignorieren, kein Blocker fürs Spiel */ }
+}
 
 function getWinningIndex() {
   const numFields = names.length;
   const anglePerSegment = (2 * Math.PI) / numFields;
-
   let adjustedRotation = rotation % (2 * Math.PI);
-
   let pointerAngle = (3 * Math.PI / 2 - adjustedRotation);
   pointerAngle = (pointerAngle + 2 * Math.PI) % (2 * Math.PI);
-
-return Math.floor(pointerAngle / anglePerSegment + 0.00001);}
-
-
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-
-function initWheel() {
-  colors = [...colorsDefault]; // 🔥 feste Reihenfolge
-  drawWheel();
+  return Math.floor(pointerAngle / anglePerSegment + 0.00001);
 }
 
 function truncateText(ctx, text, maxWidth) {
   if (ctx.measureText(text).width <= maxWidth) return text;
-
   let truncated = text;
   while (truncated.length > 0) {
     truncated = truncated.slice(0, -1);
@@ -332,229 +315,262 @@ function truncateText(ctx, text, maxWidth) {
   return '...';
 }
 
-function drawWheel() {
-  const rawNames = document.getElementById('nameList').value.split('\n').map(n => n.trim()).filter(n => n);
-  names = rawNames;
-  const numFields = names.length;
-
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const radius = canvas.width / 2;
-const anglePerSegment = (2 * Math.PI) / numFields;
-
-  for (let i = 0; i < numFields; i++) {
-    const startAngle = i * anglePerSegment;
-    const endAngle = startAngle + anglePerSegment;
-
-ctx.save();
-
-const isWinner = (i === winningIndex);
-
-// Mittelpunkt-Winkel
-const midAngle = startAngle + anglePerSegment / 2;
-
-// 🔥 Gewinner leicht nach außen schieben
-if (isWinner) {
-  const offset = 12;
-  const dx = Math.cos(midAngle) * offset;
-  const dy = Math.sin(midAngle) * offset;
-  ctx.translate(dx, dy);
-}
-
-// 🔥 größerer Radius für Gewinner
-const drawRadius = isWinner ? radius + 20 : radius;
-
-// Segment zeichnen
-ctx.beginPath();
-ctx.moveTo(centerX, centerY);
-ctx.arc(centerX, centerY, drawRadius, startAngle, endAngle);
-ctx.closePath();
-
-// Farbe
-ctx.fillStyle = colors[i % colors.length];
-ctx.fill();
-
-if (isWinner) {
-
-  // Glow
-  ctx.shadowColor = 'rgba(255, 215, 0, 0.9)';
-  ctx.shadowBlur = 25;
-
-  const w = 5; // 🔥 Grunddicke (wie dein bisheriger Rand)
-
-  // 🔴 äußerer Rand (rot)
-  ctx.lineWidth = w * 3;
-  ctx.strokeStyle = '#ff0000';
-  ctx.stroke();
-
-  // 🟡 mittlerer Rand (gelb)
-  ctx.lineWidth = w * 2;
-  ctx.strokeStyle = '#FFD700';
-  ctx.stroke();
-
-  // ⚫ innerer Rand (schwarz)
-  ctx.lineWidth = w;
-  ctx.strokeStyle = '#000';
-  ctx.stroke();
-
-} else {
-  ctx.shadowBlur = 0;
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-}
-
-
-
-ctx.restore();
-
-
-
-
-
-    // Text mittig
-ctx.save();
-ctx.translate(centerX, centerY);
-const angleMiddle = startAngle + anglePerSegment / 2;
-ctx.rotate(angleMiddle);
-ctx.fillStyle = '#000';
-ctx.textAlign = 'center';
-
-  function wrapText(ctx, text, maxWidth) {
-  const paragraphs = text.split('\n'); // 🔥 erlaubt manuelle Zeilenumbrüche
+function wrapText(ctx, text, maxWidth) {
+  const paragraphs = text.split('\n');
   let lines = [];
-
   paragraphs.forEach(paragraph => {
     const words = paragraph.split(' ');
     let line = '';
-
     words.forEach(word => {
       const testLine = line + word + ' ';
-      const metrics = ctx.measureText(testLine);
-
-      if (metrics.width > maxWidth && line !== '') {
+      if (ctx.measureText(testLine).width > maxWidth && line !== '') {
         lines.push(line.trim());
         line = word + ' ';
       } else {
         line = testLine;
       }
     });
-
     if (line) lines.push(line.trim());
   });
-
   return lines;
 }
 
-const textRadius = radius - 40;
-const maxTextWidth = radius * 0.35;
-const lineHeight = 14;
-
-// 🔥 WICHTIG: Font vorher setzen (für korrektes measureText)
-ctx.font = "16px sans-serif";
-
-let lines = wrapText(ctx, names[i], maxTextWidth);
-// 🔥 jede Zeile zusätzlich kürzen (falls ein Wort zu lang ist)
-lines = lines.map(line => truncateText(ctx, line, maxTextWidth));
-
-// 🔥 MAX ZEILEN begrenzen (z.B. 3)
-const maxLines = 3;
-
-if (lines.length > maxLines) {
-  lines = lines.slice(0, maxLines);
-
-  // 🔥 letzte Zeile kürzen + ...
-  lines[maxLines - 1] = truncateText(ctx, lines[maxLines - 1], maxTextWidth);
+function readNames() {
+  return nameListEl.value.split('\n').map(n => n.trim()).filter(n => n);
 }
-ctx.font = `${Math.max(10, 16 - lines.length)}px sans-serif`;
 
-// 🔥 vertikal zentrieren
-const startY = -((lines.length - 1) * lineHeight) / 2;
+function drawWheel() {
+  names = readNames();
+  const numFields = names.length;
 
-lines.forEach((line, idx) => {
-  ctx.save();
-  ctx.translate(textRadius, startY + idx * lineHeight);
-  ctx.rotate(Math.PI / 2);
-  ctx.fillText(line, 0, 0);
-  ctx.restore();
-});
+  ctx.clearRect(0, 0, SIZE, SIZE);
+
+  const centerX = SIZE / 2;
+  const centerY = SIZE / 2;
+  const radius = SIZE / 2;
+
+  if (numFields === 0) {
+    // Leerer Zustand statt kaputter Zeichnung
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '16px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Bitte Einträge hinzufügen', centerX, centerY);
+    return;
+  }
+
+  const anglePerSegment = (2 * Math.PI) / numFields;
+
+  for (let i = 0; i < numFields; i++) {
+    const startAngle = i * anglePerSegment;
+    const endAngle = startAngle + anglePerSegment;
+
+    ctx.save();
+    const isWinner = (i === winningIndex);
+    const midAngle = startAngle + anglePerSegment / 2;
+
+    if (isWinner) {
+      const offset = 10;
+      ctx.translate(Math.cos(midAngle) * offset, Math.sin(midAngle) * offset);
+    }
+
+    const drawRadius = isWinner ? radius + 14 : radius;
+
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, drawRadius, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+
+    if (isWinner) {
+      ctx.shadowColor = 'rgba(255, 215, 0, 0.9)';
+      ctx.shadowBlur = 20;
+      ctx.lineWidth = 8;
+      ctx.strokeStyle = '#dc2626';
+      ctx.stroke();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#FFD700';
+      ctx.stroke();
+    } else {
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Text radial (von innen nach aussen) -> deutlich mehr Buchstaben sichtbar
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(startAngle + anglePerSegment / 2);
+    ctx.fillStyle = '#1f2937';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    const innerRadius = 34;
+    const maxTextWidth = radius - innerRadius - 12;
+    const maxLines = Math.max(1, Math.min(4, Math.floor((anglePerSegment * radius * 0.55) / 16)));
+
+    let fontSize = numFields > 12 ? 13 : 16;
+    ctx.font = 'bold ' + fontSize + 'px Arial';
+    let lines = wrapText(ctx, names[i], maxTextWidth);
+
+    while (lines.length > maxLines && fontSize > 9) {
+      fontSize -= 1;
+      ctx.font = 'bold ' + fontSize + 'px Arial';
+      lines = wrapText(ctx, names[i], maxTextWidth);
+    }
+    if (lines.length > maxLines) {
+      lines = lines.slice(0, maxLines);
+      lines[maxLines - 1] = truncateText(ctx, lines[maxLines - 1], maxTextWidth);
+    }
+    lines = lines.map(function (line) { return truncateText(ctx, line, maxTextWidth); });
+
+    const lineHeight = fontSize + 3;
+    const startOffset = -((lines.length - 1) * lineHeight) / 2;
+    const textCenter = innerRadius + (radius - innerRadius) / 2;
+    const midA = startAngle + anglePerSegment / 2;
+    // Waehrend des Drehens: alle Texte laufen von der Nabe nach aussen (einheitlich lesbar).
+    // Nach dem Drehen: Texte auf der linken Radhaelfte werden gedreht, damit man den Kopf kaum neigen muss.
+    let flip = false;
+    if (!spinning && !idle) {
+      let screenAngle = (midA + rotation) % (2 * Math.PI);
+      if (screenAngle < 0) screenAngle += 2 * Math.PI;
+      flip = screenAngle > Math.PI / 2 && screenAngle < 3 * Math.PI / 2;
+    }
+
+    ctx.lineJoin = 'round';
+    ctx.miterLimit = 2;
+    ctx.lineWidth = Math.max(3, fontSize / 4);
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+
+    lines.forEach(function (line, idx) {
+      ctx.save();
+      ctx.translate(textCenter, 0);
+      if (flip) ctx.rotate(Math.PI);
+      ctx.strokeText(line, 0, startOffset + idx * lineHeight);
+      ctx.fillText(line, 0, startOffset + idx * lineHeight);
+      ctx.restore();
+    });
 
     ctx.restore();
   }
 
-  // Weißer Kreis in der Mitte
+  // Mitte
   ctx.beginPath();
-  ctx.arc(centerX, centerY, 30, 0, 2*Math.PI);
+  ctx.arc(centerX, centerY, 28, 0, 2 * Math.PI);
   ctx.fillStyle = '#fff';
   ctx.fill();
-  ctx.strokeStyle = '#333';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 3;
   ctx.stroke();
 }
 
 function animate() {
-  rotation += spinSpeed;
+  rotation += spinning ? spinSpeed : (idle ? 0.004 : 0);
+
   ctx.save();
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.translate(canvas.width/2, canvas.height/2);
+  ctx.clearRect(0, 0, SIZE, SIZE);
+  ctx.translate(SIZE / 2, SIZE / 2);
   ctx.rotate(rotation);
-  ctx.translate(-canvas.width/2, -canvas.height/2);
+  ctx.translate(-SIZE / 2, -SIZE / 2);
   drawWheel();
   ctx.restore();
 
-  if(spinning) {
+  if (spinning) {
     spinSpeed += (targetSpeed - spinSpeed) * 0.02;
 
-if(Math.abs(spinSpeed) < 0.002 && targetSpeed === 0) {
-  spinning = false;
-  spinSpeed = 0;
-  rotation = rotation % (2*Math.PI);
+    if (Math.abs(spinSpeed) < 0.002 && targetSpeed === 0) {
+      spinning = false;
+      spinSpeed = 0;
+      rotation = rotation % (2 * Math.PI);
+      spinBtn.disabled = false;
 
-  winningIndex = getWinningIndex(); // 🔥 nur speichern, kein alert mehr
-}
-
-
-
-
+      if (names.length > 0) {
+        winningIndex = getWinningIndex();
+        ergebnisEl.textContent = '🎉 Gewonnen: ' + names[winningIndex];
+        launchConfetti();
+      }
+    }
   }
 
   requestAnimationFrame(animate);
 }
 
+function launchConfetti() {
+  const rect = canvas.getBoundingClientRect();
+  const startX = rect.left + rect.width / 2;
+  const startY = rect.top;
+
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.style.position = 'fixed';
+    piece.style.left = startX + 'px';
+    piece.style.top = startY + 'px';
+    piece.style.width = '8px';
+    piece.style.height = '8px';
+    piece.style.borderRadius = '50%';
+    piece.style.background = `hsl(${Math.random() * 360},100%,50%)`;
+    piece.style.zIndex = '10001';
+    piece.style.pointerEvents = 'none';
+    document.body.appendChild(piece);
+
+    const x = (Math.random() - 0.5) * 320;
+    const y = -(80 + Math.random() * 200);
+
+    piece.animate([
+      { transform: 'translate(0,0)', opacity: 1 },
+      { transform: `translate(${x}px, ${-y}px)`, opacity: 0 }
+    ], {
+      duration: 1200 + Math.random() * 500,
+      easing: 'ease-out'
+    });
+
+    setTimeout(() => piece.remove(), 1800);
+  }
+}
+
 function spinWheel() {
-  if (names.length === 0) return;
-
-  // 🔥 auch während Drehung neu starten möglich
-  spinning = true;
-  winningIndex = null;
-
-  // kleine Bremse, falls schon am Drehen
-  if (spinSpeed > 0.05) {
-    spinSpeed *= 0.5;
+  names = readNames();
+  if (names.length === 0) {
+    ergebnisEl.textContent = 'Bitte zuerst Einträge hinzufügen.';
+    return;
   }
 
-  // neue Beschleunigung
-  spinSpeed = 0.005;
+  saveNames();
+
+  if (stopTimeoutId) clearTimeout(stopTimeoutId);
+
+  spinning = true;
+  idle = false;
+  winningIndex = null;
+  ergebnisEl.textContent = '';
+  spinBtn.disabled = true;
+
+  if (spinSpeed > 0.05) spinSpeed *= 0.5;
+  else spinSpeed = 0.005;
+
   targetSpeed = Math.random() * 0.3 + 0.3;
 
-  setTimeout(() => {
+  stopTimeoutId = setTimeout(() => {
     targetSpeed = 0;
   }, 1500);
 }
 
+nameListEl.addEventListener('input', () => {
+  drawWheel();
+});
+nameListEl.addEventListener('blur', saveNames);
 
+document.getElementById('copyright-jahr').textContent = new Date().getFullYear();
 
 // Initial
-initWheel();animate();
+loadSavedNames();
+setupCanvasResolution();
+colors = [...colorsDefault];
+drawWheel();
+animate();
 </script>
-<div id="footer">
-  © 2026 miStudia.de - Markus Autsch – Glücksrad
-</div>
 
 </body>
-
-
 </html>
